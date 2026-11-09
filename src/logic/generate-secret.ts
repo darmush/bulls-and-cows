@@ -1,7 +1,19 @@
+import { type Base, DIGITS } from '../constants.js';
+
 export const generateSecret = (
-  _length: number,
-  _base: number,
-  _random: () => number = Math.random,
+  length: number,
+  base: Base,
+  random: () => number = Math.random,
 ): string => {
-  throw new Error('Function not implemented.');
+  const pick = (available: string[], count: number): string => {
+    if (count <= 0) return '';
+    const digit = available[getRandomIndex(random, available.length)];
+    const rest = available.filter((el) => el !== digit);
+    return digit + pick(rest, count - 1);
+  };
+
+  return pick([...DIGITS.slice(0, base)], length);
 };
+
+const getRandomIndex = (random: () => number, length: number): number =>
+  Math.floor(random() * length);
