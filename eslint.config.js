@@ -26,7 +26,7 @@ export default [
     },
   },
   {
-    files: ['src/logic/**/*.ts', 'src/state/**/*.ts'],
+    files: ['src/logic/**/*.ts', 'src/state/**/*.ts', 'src/utils/**/*.ts'],
     rules: {
       'no-restricted-syntax': ['error', 'ClassDeclaration'],
       'no-restricted-globals': ['error', 'document', 'window', 'localStorage'],
