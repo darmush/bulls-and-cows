@@ -4,6 +4,7 @@
   --line: #e2e2e2;
   --surface: #f4f4f4;
   --accent: #c49000;
+  --error: #b3261e;
 
   --font-main: Arial, Helvetica, sans-serif;
   --font-digits: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
@@ -135,7 +136,6 @@ button {
   font-family: var(--font-digits);
   font-size: 24px;
   font-weight: 700;
-  margin-left: 10px;
 }
 
 .actions {
@@ -191,11 +191,198 @@ button {
   border: 2px solid var(--fg);
 }
 
-@media (max-width: 860px) {
-  :root {
-    --legend-height: 96px;
-  }
+.app--with-legend {
+  padding-bottom: 120px;
+}
 
+.app--with-legend .layout {
+  align-items: start;
+}
+
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 24px;
+  padding-bottom: 20px;
+  margin-bottom: 56px;
+}
+
+.topbar__side {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+}
+
+.button--small {
+  padding: 8px 16px;
+  font-size: 15px;
+}
+
+.timer {
+  font-family: var(--font-digits);
+  font-size: 18px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.guess {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.guess__field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+}
+
+.guess__submit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.guess__head {
+  align-self: stretch;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--fg);
+}
+
+.guess__head .label {
+  margin: 0;
+}
+
+.digits {
+  position: relative;
+  display: flex;
+  gap: 12px;
+}
+
+.digits__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  opacity: 0;
+  cursor: text;
+}
+
+.digits__cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 80px;
+  border-bottom: 3px solid var(--fg);
+  font-family: var(--font-digits);
+  font-size: 40px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.digits__cell--active {
+  border-bottom-color: var(--accent);
+}
+
+.note {
+  margin: 0;
+  min-height: 1.5em;
+  font-size: 14px;
+  color: var(--error);
+}
+
+.history {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.history th {
+  padding: 0 40px 10px 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: left;
+  border-bottom: 1px solid var(--fg);
+}
+
+.history td {
+  padding: 14px 40px 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.history th:last-child,
+.history td:last-child {
+  padding-right: 0;
+}
+
+.history__index {
+  font-family: var(--font-digits);
+  font-size: 14px;
+}
+
+.history__guess {
+  font-family: var(--font-digits);
+  font-size: 28px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.history__row--win .history__guess {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.score {
+  display: flex;
+  gap: 20px;
+  font-family: var(--font-digits);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.score__part--zero {
+  font-weight: 400;
+}
+
+.score__part--zero .score__dot--bull {
+  background: var(--line);
+}
+
+.score__part--zero .score__dot--cow {
+  border-color: var(--line);
+}
+
+.legend {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 18px 16px;
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+}
+
+.legend__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+}
+
+@media (max-width: 860px) {
   .app {
     padding-top: 24px;
   }
@@ -205,7 +392,21 @@ button {
     gap: 48px;
   }
 
+  .guess__field {
+    align-self: center;
+  }
+
   .display {
     font-size: 56px;
+  }
+
+  .digits__cell {
+    width: 44px;
+    height: 58px;
+    font-size: 28px;
+  }
+
+  .history__guess {
+    font-size: 22px;
   }
 }
