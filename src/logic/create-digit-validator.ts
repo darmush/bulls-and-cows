@@ -1,5 +1,7 @@
-export const createDigitValidator =
-  (_base: number) =>
-  (_digit: string): boolean => {
-    throw new Error('Function not implemented.');
-  };
+import { DIGITS, type Base } from '../constants.js';
+
+export const createDigitValidator = (base: Base) => {
+  const validDigits = [...DIGITS.slice(0, base)];
+
+  return (digit: string): boolean => validDigits.includes(digit.toLowerCase());
+};
