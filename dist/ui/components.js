@@ -1,4 +1,5 @@
 import { el } from './dom.js';
+import { formatDate, formatTime } from './format.js';
 const createDot = (kind) => el('span', { className: `score__dot score__dot--${kind}` });
 export const createLegend = () => el('footer', { className: 'legend' }, [
     el('div', { className: 'legend__inner' }, [
@@ -17,13 +18,27 @@ export const createScore = ({ bulls, cows }) => el('span', { className: 'score' 
     createScorePart(bulls, 'bull'),
     createScorePart(cows, 'cow'),
 ]);
-export const createTopbar = (content, onNewGame) => el('header', { className: 'topbar' }, [
+const createSmallButton = (text, onClick) => el('button', {
+    type: 'button',
+    className: 'button button--ghost button--small',
+    textContent: text,
+    onclick: onClick,
+});
+export const createTopbar = (content, onNewGame, onShowRecords) => el('header', { className: 'topbar' }, [
     el('div', { className: 'topbar__side' }, content),
-    el('button', {
-        type: 'button',
-        className: 'button button--ghost button--small',
-        textContent: 'Новая игра',
-        onclick: onNewGame,
-    }),
+    el('div', { className: 'topbar__actions' }, [
+        createSmallButton('Рекорды', onShowRecords),
+        createSmallButton('Новая игра', onNewGame),
+    ]),
 ]);
+export const createRecordsTable = (records) => {
+    const head = el('tr', {}, ['#', 'Попытки', 'Время', 'Дата'].map((text) => el('th', { textContent: text })));
+    const rows = records.map((record, index) => el('tr', {}, [
+        el('td', { textContent: String(index + 1) }),
+        el('td', { textContent: String(record.attempts) }),
+        el('td', { textContent: formatTime(record.duration) }),
+        el('td', { textContent: formatDate(record.date) }),
+    ]));
+    return el('table', { className: 'records' }, [el('thead', {}, [head]), el('tbody', {}, rows)]);
+};
 //# sourceMappingURL=components.js.map

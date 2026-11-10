@@ -1,11 +1,11 @@
 import { BASE_LABELS } from '../../constants.js';
 import { createDigitValidator } from '../../logic/create-digit-validator.js';
 import { isValidGuess } from '../../logic/is-valid-guess.js';
-import { hasGuess, isWon, makeGuess } from '../../state/game.js';
+import { getDuration, hasGuess, isWon, makeGuess } from '../../state/game.js';
 import { createLegend, createScore, createTopbar } from '../components.js';
 import { el } from '../dom.js';
-import { formatTime } from '../format.js';
-export const createGameScreen = ({ game: initialGame, onWin, onNewGame, }) => {
+import { formatTime, pluralize } from '../format.js';
+export const createGameScreen = ({ game: initialGame, onWin, onNewGame, onShowRecords, }) => {
     let game = initialGame;
     const { length, base } = game.settings;
     const isValidDigit = createDigitValidator(base);
@@ -20,6 +20,12 @@ export const createGameScreen = ({ game: initialGame, onWin, onNewGame, }) => {
     const note = el('p', { className: 'note' });
     const history = el('div');
     const timer = el('span', { className: 'timer', textContent: formatTime(0) });
+    const digits = el('div', { className: 'digits' }, [input, ...cells]);
+    const submitButton = el('button', {
+        type: 'submit',
+        className: 'button',
+        textContent: 'Проверить',
+    });
     const renderCells = (value) => {
         cells.forEach((cell, index) => {
             cell.textContent = value.charAt(index);
@@ -57,11 +63,24 @@ export const createGameScreen = ({ game: initialGame, onWin, onNewGame, }) => {
         if (error !== null)
             return;
         game = makeGuess(game, guess, Date.now());
+        renderHistory();
+        if (isWon(game)) {
+            showWin(onWin(game));
+            return;
+        }
         input.value = '';
         renderCells('');
-        renderHistory();
-        if (isWon(game))
-            onWin(game);
+    };
+    const showWin = (isRecord) => {
+        const attempts = game.history.length;
+        const attemptsText = `${attempts} ${pluralize(attempts, ['попытка', 'попытки', 'попыток'])}`;
+        note.textContent = `Успех! ${attemptsText}${isRecord ? '. Рекорд!' : ''}`;
+        note.classList.add('note--success');
+        timer.textContent = formatTime(getDuration(game, Date.now()));
+        timer.classList.add('timer--won');
+        digits.classList.add('digits--won');
+        input.disabled = true;
+        submitButton.disabled = true;
     };
     input.addEventListener('input', () => {
         input.value = [...input.value].filter(isValidDigit).join('').slice(0, length);
@@ -73,13 +92,13 @@ export const createGameScreen = ({ game: initialGame, onWin, onNewGame, }) => {
             clearInterval(intervalId);
             return;
         }
-        timer.textContent = formatTime(Date.now() - game.startedAt);
+        timer.textContent = formatTime(getDuration(game, Date.now()));
     }, 1000);
     renderCells('');
     renderHistory();
     requestAnimationFrame(() => input.focus());
     return el('main', { className: 'app app--with-legend' }, [
-        createTopbar([timer], onNewGame),
+        createTopbar([timer], onNewGame, onShowRecords),
         el('div', { className: 'layout' }, [
             el('form', {
                 className: 'guess',
@@ -98,11 +117,8 @@ export const createGameScreen = ({ game: initialGame, onWin, onNewGame, }) => {
                     el('span', { className: 'label', textContent: BASE_LABELS[base] }),
                 ]),
                 el('div', { className: 'guess__field' }, [
-                    el('div', { className: 'digits' }, [input, ...cells]),
-                    el('div', { className: 'guess__submit' }, [
-                        note,
-                        el('button', { type: 'submit', className: 'button', textContent: 'Проверить' }),
-                    ]),
+                    digits,
+                    el('div', { className: 'guess__submit' }, [note, submitButton]),
                 ]),
             ]),
             history,

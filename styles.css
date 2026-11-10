@@ -195,7 +195,8 @@ button {
   padding-bottom: 120px;
 }
 
-.app--with-legend .layout {
+.app--with-legend .layout,
+.app--records .layout {
   align-items: start;
 }
 
@@ -236,6 +237,7 @@ button {
 }
 
 .guess__field {
+  align-self: center;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -306,14 +308,18 @@ button {
   width: 100%;
 }
 
-.history th {
-  padding: 0 40px 10px 0;
+.history th,
+.records th {
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   text-align: left;
   border-bottom: 1px solid var(--fg);
+}
+
+.history th {
+  padding: 0 40px 10px 0;
 }
 
 .history td {
@@ -382,6 +388,63 @@ button {
   gap: 8px 28px;
 }
 
+.topbar__actions {
+  display: flex;
+  gap: 12px;
+}
+
+.button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.note--success {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.timer--won {
+  color: var(--accent);
+}
+
+.digits--won .digits__cell {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.records-column {
+  position: relative;
+}
+
+.records-holder {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  padding-top: 32px;
+}
+
+.records {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 17px;
+}
+
+.records th {
+  padding: 0 16px 10px 0;
+}
+
+.records td {
+  padding: 14px 16px 14px 0;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-digits);
+}
+
+.records th:first-child {
+  width: 56px;
+}
+
 @media (max-width: 860px) {
   .app {
     padding-top: 24px;
@@ -392,8 +455,9 @@ button {
     gap: 48px;
   }
 
-  .guess__field {
-    align-self: center;
+  .records-holder {
+    position: static;
+    padding-top: 0;
   }
 
   .display {

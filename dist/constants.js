@@ -8,4 +8,5 @@ export const BASE_LABELS = {
 };
 export const MIN_LENGTH = 2;
 export const MAX_LENGTH = 6;
+export const RECORDS_LIMIT = 10;
 //# sourceMappingURL=constants.js.map

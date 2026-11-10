@@ -8,6 +8,7 @@ export const createGame = (settings, secret, startedAt) => ({
 });
 export const hasGuess = (game, guess) => game.history.some((entry) => entry.guess.toLowerCase() === guess.toLowerCase());
 export const isWon = (game) => game.finishedAt !== null;
+export const getDuration = (game, now) => (game.finishedAt ?? now) - game.startedAt;
 export const makeGuess = (game, guess, now) => {
     if (isWon(game) || hasGuess(game, guess))
         return game;
